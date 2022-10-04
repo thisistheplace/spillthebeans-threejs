@@ -1,0 +1,13 @@
+Package: spillthebeansThreejs
+Title: threejs component for spillthebeans landing page
+Version: 0.0.1
+Description: threejs component for spillthebeans landing page
+Depends: R (>= 3.0.2)
+Imports: 
+Suggests: 
+License: GPL-3.0 + file LICENSE
+URL: https://github.com/thisistheplace/spillthebeans-threejs
+BugReports: https://github.com/thisistheplace/spillthebeans-threejs/issues
+Encoding: UTF-8
+LazyData: true
+KeepSource: true
