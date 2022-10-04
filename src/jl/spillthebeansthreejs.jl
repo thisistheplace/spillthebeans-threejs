@@ -6,18 +6,14 @@ export spillthebeansthreejs
     spillthebeansthreejs(;kwargs...)
 
 A SpillthebeansThreejs component.
-ExampleComponent is an example component.
-It takes a property, `label`, and
-displays it.
-It renders an input with the property `value`
-which is editable by the user.
+
 Keyword arguments:
-- `id` (String; optional): The ID used to identify this component in Dash callbacks.
-- `label` (String; required): A label that will be printed when this component is rendered.
-- `value` (String; optional): The value displayed in the input.
+- `id` (optional): The ID used to identify this component in Dash callbacks.
+- `beans` (optional): The beans!
+- `selected` (optional): The selected bean.
 """
 function spillthebeansthreejs(; kwargs...)
-        available_props = Symbol[:id, :label, :value]
+        available_props = Symbol[:id, :beans, :selected]
         wild_props = Symbol[]
         return Component("spillthebeansthreejs", "SpillthebeansThreejs", "spillthebeans_threejs", available_props, wild_props; kwargs...)
 end

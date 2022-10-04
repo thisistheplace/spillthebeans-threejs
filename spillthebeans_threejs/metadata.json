@@ -1,1 +1,33 @@
-{}
+{
+  "src/lib/components/SpillthebeansThreejs.react.js": {
+    "description": "",
+    "displayName": "SpillthebeansThreejs",
+    "methods": [],
+    "props": {
+      "id": {
+        "type": {
+          "name": "custom",
+          "raw": "PropTypes.string.isRequired"
+        },
+        "required": false,
+        "description": "The ID used to identify this component in Dash callbacks."
+      },
+      "beans": {
+        "type": {
+          "name": "custom",
+          "raw": "PropTypes.arrayOf(\n    PropTypes.shape({\n        id: PropTypes.string,\n        url: PropTypes.string\n    })\n)"
+        },
+        "required": false,
+        "description": "The beans!"
+      },
+      "selected": {
+        "type": {
+          "name": "custom",
+          "raw": "PropTypes.string"
+        },
+        "required": false,
+        "description": "The selected bean."
+      }
+    }
+  }
+}

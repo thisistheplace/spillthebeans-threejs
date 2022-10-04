@@ -24,6 +24,7 @@
   "author": "Ben Cannell <bean.can.design@gmail.com>",
   "license": "GPL-3.0",
   "dependencies": {
+    "@react-three/drei": "^9.32.11",
     "@react-three/fiber": "^8.8.9",
     "chokidar": "^3.5.3",
     "glob-parent": "^6.0.2",

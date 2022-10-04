@@ -1,9 +1,9 @@
 # AUTO GENERATED FILE - DO NOT EDIT
 
 #' @export
-spillthebeansThreejs <- function(id=NULL, label=NULL, value=NULL) {
+spillthebeansThreejs <- function(id=NULL, beans=NULL, selected=NULL) {
     
-    props <- list(id=id, label=label, value=value)
+    props <- list(id=id, beans=beans, selected=selected)
     if (length(props) > 0) {
         props <- props[!vapply(props, is.null, logical(1))]
     }
@@ -11,7 +11,7 @@ spillthebeansThreejs <- function(id=NULL, label=NULL, value=NULL) {
         props = props,
         type = 'SpillthebeansThreejs',
         namespace = 'spillthebeans_threejs',
-        propNames = c('id', 'label', 'value'),
+        propNames = c('id', 'beans', 'selected'),
         package = 'spillthebeansThreejs'
         )
 
