@@ -2,7 +2,7 @@
   "name": "spillthebeans_threejs",
   "version": "0.0.1",
   "description": "threejs component for spillthebeans landing page",
-"repository": {
+  "repository": {
     "type": "git",
     "url": "git://github.com/thisistheplace/spillthebeans-threejs.git"
   },
@@ -24,15 +24,22 @@
   "author": "Ben Cannell <bean.can.design@gmail.com>",
   "license": "GPL-3.0",
   "dependencies": {
-    "ramda": "^0.26.1"
+    "@react-three/fiber": "^8.8.9",
+    "chokidar": "^3.5.3",
+    "glob-parent": "^6.0.2",
+    "ramda": "^0.26.1",
+    "three": "^0.145.0",
+    "watchpack": "^2.4.0",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.5.4",
     "@babel/preset-env": "^7.5.4",
     "@babel/preset-react": "^7.0.0",
-    "@plotly/webpack-dash-dynamic-import": "^1.2.0",
     "@plotly/dash-component-plugins": "^1.2.0",
+    "@plotly/webpack-dash-dynamic-import": "^1.2.0",
     "babel-eslint": "^10.0.2",
     "babel-loader": "^8.0.6",
     "copyfiles": "^2.1.1",
@@ -42,15 +49,12 @@
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-react": "^7.14.2",
     "prop-types": "^15.7.2",
-    "react": "^16.8.6",
+    "react": "^18.2.0",
     "react-docgen": "^4.1.1",
-    "react-dom": "^16.8.6",
-    "styled-jsx": "^3.2.1",
+    "react-dom": "^18.2.0",
     "style-loader": "^0.23.1",
-    "terser-webpack-plugin": "^2.3.0",
-    "webpack": "4.36.1",
-    "webpack-cli": "3.3.6",
-    "webpack-serve": "3.1.0"
+    "styled-jsx": "^5.0.7",
+    "terser-webpack-plugin": "^2.3.0"
   },
   "engines": {
     "node": ">=8.11.0",

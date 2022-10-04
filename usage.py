@@ -6,17 +6,9 @@ app = Dash(__name__)
 app.layout = html.Div([
     spillthebeans_threejs.SpillthebeansThreejs(
         id='input',
-        value='my-value',
-        label='my-label'
+        beans={"id": "test"}
     ),
-    html.Div(id='output')
 ])
-
-
-@callback(Output('output', 'children'), Input('input', 'value'))
-def display_output(value):
-    return 'You have entered {}'.format(value)
-
 
 if __name__ == '__main__':
     app.run_server(debug=True)
