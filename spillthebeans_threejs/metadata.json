@@ -2,31 +2,64 @@
   "src/lib/components/SpillthebeansThreejs.react.js": {
     "description": "",
     "displayName": "SpillthebeansThreejs",
-    "methods": [],
+    "methods": [
+      {
+        "name": "handleFileUpdate",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "createOcean",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "sun",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "createSky",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "loadIfc",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "ifcloader",
+        "docblock": null,
+        "modifiers": [
+          "async"
+        ],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "disposeEnvironment",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      }
+    ],
     "props": {
       "id": {
         "type": {
-          "name": "custom",
-          "raw": "PropTypes.string.isRequired"
+          "name": "string"
         },
         "required": false,
-        "description": "The ID used to identify this component in Dash callbacks."
-      },
-      "beans": {
-        "type": {
-          "name": "custom",
-          "raw": "PropTypes.arrayOf(\n    PropTypes.shape({\n        id: PropTypes.string,\n        url: PropTypes.string\n    })\n)"
-        },
-        "required": false,
-        "description": "The beans!"
-      },
-      "selected": {
-        "type": {
-          "name": "custom",
-          "raw": "PropTypes.string"
-        },
-        "required": false,
-        "description": "The selected bean."
+        "description": "The ID used to identify the container for the IFC viewer component."
       }
     }
   }

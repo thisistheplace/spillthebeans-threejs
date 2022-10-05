@@ -1,74 +1,88 @@
-// import React, {Component, useEffect, useState, useCallback, setProps} from 'react';
-// import {Canvas} from '@react-three/fiber/native';
-// import PropTypes from 'prop-types';
-// // import {Can} from './../model/can.js';
+import React, {Component, useCallback} from 'react';
+import PropTypes from 'prop-types';
 
-// export default class SpillthebeansThreejs extends Component {
+import { IfcViewerAPI } from 'web-ifc-viewer';
 
-//     // build the model once!
-//     constructor(props){
-//         super(props);
-//     }
-  
-//     render () {
-//         const {
-//             id,
-//             beans,
-//             selected
-//         } = this.props
+import Ocean from '../environment/Ocean';
+import Daytime from '../environment/Daytime';
 
-//         return (
-//             // <Can/>
-//             <div id={id}>
-//                 <Canvas id="canvas_holder">
-//                     <ambientLight />
-//                     <pointLight position={[10, 10, 10]} />
-//                     <boxGeometry args={[2, 2, 2]} />
-//                 </Canvas>
-//             </div>
-//         )
-//     }
-// }
+import Can from '../model/can';
 
-import React, { Suspense } from 'react'
-import { useFBX } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
+class SpillthebeansThreejs extends Component {
 
-function Model(props) {
-  const { scene } = useFBX("assets/can.fbx")
-  return <primitive {...props} object={scene} />
-}
+    constructor(props) {
+        super(props);
+        this.state = {
+        }
+        this.scene = null;
+        this.viewer = null;
+    }
 
-export default function SpillthebeansThreejs() {
-  return (
-    <Canvas>
-      <Suspense fallback={null}>
-        <Model />
-      </Suspense>
-    </Canvas>
-  )
+    componentDidUpdate(prevProps){
+    }
+
+    componentDidMount() {
+        const container = document.getElementById(this.props.id);
+        const viewer = new IfcViewerAPI({
+            container: container,
+        });
+        viewer.axes.setAxes();
+        viewer.IFC.setWasmPath('../../');
+        viewer.IFC.loader.ifcManager.applyWebIfcConfig({
+            USE_FAST_BOOLS: true,
+            COORDINATE_TO_ORIGIN: true
+          });
+
+        // Don't show edges
+        viewer.context.renderer.postProduction.active = false;
+
+        this.viewer = viewer;
+        this.scene = this.viewer.IFC.context.getScene();
+
+        // Create environmental components
+        this.sky = this.createSky();
+        this.ocean = this.createOcean(this.sky.sun);
+
+        // Selectors
+        window.onmousemove = () => viewer.IFC.selector.prePickIfcItem();
+        window.onclick = () => viewer.IFC.selector.pickIfcItem(true);
+        window.ondblclick = viewer.IFC.selector.highlightIfcItem(true);
+        // Clear selection
+        window.onkeydown = (event) => {
+            if(event.code === 'KeyC') {
+                viewer.IFC.selector.unpickIfcItems();
+                viewer.IFC.selector.unHighlightIfcItems();
+            }
+        }
+    }
+
+    createOcean(sun){
+        return new Ocean(this.viewer.IFC.context, sun);
+    }
+
+    createSky(){
+        return new Daytime(this.viewer.IFC.context);
+    }
+
+    disposeEnvironment(){
+        this.ocean.removeFromScene();
+        this.sky.removeFromScene();
+    }
+
+    render() {
+        return (
+            <div id={this.props.id} className={"fullsize"}/>
+        );
+    }
 }
 
 SpillthebeansThreejs.defaultProps = {};
 
 SpillthebeansThreejs.propTypes = {
     /**
-     * The ID used to identify this component in Dash callbacks.
+     * The ID used to identify the container for the IFC viewer component.
      */
-    id: PropTypes.string.isRequired,
-
-    /**
-     * The beans!
-     */
-    beans: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string,
-            url: PropTypes.string
-        })
-    ),
-
-    /**
-     * The selected bean.
-     */
-    selected: PropTypes.string
+    id: PropTypes.string,
 };
+
+export default SpillthebeansThreejs;

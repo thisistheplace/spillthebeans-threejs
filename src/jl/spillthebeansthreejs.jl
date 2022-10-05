@@ -8,12 +8,10 @@ export spillthebeansthreejs
 A SpillthebeansThreejs component.
 
 Keyword arguments:
-- `id` (optional): The ID used to identify this component in Dash callbacks.
-- `beans` (optional): The beans!
-- `selected` (optional): The selected bean.
+- `id` (String; optional): The ID used to identify the container for the IFC viewer component.
 """
 function spillthebeansthreejs(; kwargs...)
-        available_props = Symbol[:id, :beans, :selected]
+        available_props = Symbol[:id]
         wild_props = Symbol[]
         return Component("spillthebeansthreejs", "SpillthebeansThreejs", "spillthebeans_threejs", available_props, wild_props; kwargs...)
 end

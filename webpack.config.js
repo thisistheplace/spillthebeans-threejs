@@ -94,7 +94,7 @@ module.exports = (env, argv) => {
                 })
             ],
             splitChunks: {
-                name: "chunks",
+                name: true,
                 cacheGroups: {
                     async: {
                         chunks: 'async',
@@ -107,7 +107,7 @@ module.exports = (env, argv) => {
                         chunks: 'all',
                         minSize: 0,
                         minChunks: 2,
-                        name: 'spillthebeans_threejs-shared'
+                        name: 'dash_wtgviewer-shared'
                     }
                 }
             }

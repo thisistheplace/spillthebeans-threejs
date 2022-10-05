@@ -1,11 +1,32 @@
 import spillthebeans_threejs
 from dash import Dash, callback, html, Input, Output
+from pathlib import Path
+import dash_bootstrap_components as dbc
+from flask import Flask, make_response
+from flask_restful import Resource, Api
 
-app = Dash(__name__)
+def read_wasm(fpath: str) -> bytes:
+    resolved = Path(fpath).resolve()
+    with open(resolved, "rb") as f:
+        fbytes = f.read()
+    return fbytes
+
+class WasmFile(Resource):
+    def get(self):
+        response = make_response(read_wasm("static/web-ifc.wasm"))
+        response.headers["content-type"] = "application/wasm"
+        return response
+
+server = Flask('my_app')
+app = Dash(server=server, external_stylesheets=[dbc.themes.SIMPLEX])
+api = Api(server)
+
+api.add_resource(WasmFile, '/web-ifc.wasm')
 
 app.layout = html.Div([
+    html.Div(id="input", children=["test"]),
     spillthebeans_threejs.SpillthebeansThreejs(
-        id='input',
+        id='test',
         # beans=[{"id": "test"}]
     ),
     ],
@@ -13,7 +34,7 @@ app.layout = html.Div([
         "width": "100%",
         "height": "100%"
     }
-    )
+)
 
 if __name__ == '__main__':
     app.run_server(debug=True)

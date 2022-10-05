@@ -1,6 +1,5 @@
 import React, { Suspense } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
-import { useLoader } from '@react-three/fiber';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 
 function LoadCan() {
@@ -13,9 +12,9 @@ function LoadCan() {
 // function to build model
 function Can(){
   return (
-    // <Suspense fallback={<Spinner animation="border" />}>
-    <LoadCan />
-    // {/* </Suspense> */}
+    <Suspense fallback={<Spinner animation="border" />}>
+      <LoadCan />
+    </Suspense>
   );
 
 };
