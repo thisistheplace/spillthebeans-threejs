@@ -11,17 +11,17 @@ def read_wasm(fpath: str) -> bytes:
         fbytes = f.read()
     return fbytes
 
-class WasmFile(Resource):
+class Can(Resource):
     def get(self):
-        response = make_response(read_wasm("static/web-ifc.wasm"))
-        response.headers["content-type"] = "application/wasm"
+        response = make_response(read_wasm("assets/can.glb"))
+        response.headers["content-type"] = "application/text"
         return response
 
 server = Flask('my_app')
 app = Dash(server=server, external_stylesheets=[dbc.themes.SIMPLEX])
 api = Api(server)
 
-api.add_resource(WasmFile, '/web-ifc.wasm')
+api.add_resource(Can, '/assets/can.glb')
 
 app.layout = html.Div([
     html.Div(id="input", children=["test"]),

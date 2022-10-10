@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, Suspense } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
+import {useGLTF, Loader, TrackballControls} from '@react-three/drei'
 
-import {Can} from '../model/can'
+// import {Can} from '../model/can'
 
 function Box(props) {
   // This reference gives us direct access to the THREE.Mesh object
@@ -28,13 +29,31 @@ function Box(props) {
   )
 }
 
+function Can({ ...props }) {
+    const group = useRef()
+    const { nodes, materials } = useGLTF('/assets/can.glb')
+    console.log(nodes)
+    console.log(materials)
+    return (
+    <group ref={group} {...props} dispose={null}>
+        <mesh geometry={nodes["Can001"].geometry} material={materials["Tin"]}/>
+    </group>
+    )
+}
+
 function Bean(props){
     return (
-        <Canvas>
-            <ambientLight />
-            <pointLight position={[10, 10, 10]} />
-            <Box position={[-1.2, 0, 0]} />
-        </Canvas>
+        <>
+            <Canvas>
+                <TrackballControls/>
+                <ambientLight />
+                <pointLight position={[10, 10, 10]} />
+                <Suspense fallback={null}>
+                    <Can/>
+                </Suspense>
+            </Canvas>
+            <Loader />
+        </>
     )
 }
 
