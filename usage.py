@@ -25,6 +25,7 @@ api.add_resource(WasmFile, '/web-ifc.wasm')
 
 app.layout = html.Div([
     html.Div(id="input", children=["test"]),
+    html.Canvas(id="canvas"),
     spillthebeans_threejs.SpillthebeansThreejs(
         id='test',
         # beans=[{"id": "test"}]

@@ -1,79 +1,51 @@
-import React, {Component, useCallback} from 'react';
 import PropTypes from 'prop-types';
 
-import { IfcViewerAPI } from 'web-ifc-viewer';
+import React, { useRef, useState } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
 
-import Ocean from '../environment/Ocean';
-import Daytime from '../environment/Daytime';
+import {Can} from '../model/can'
 
-import Can from '../model/can';
+function Box(props) {
+  // This reference gives us direct access to the THREE.Mesh object
+  const ref = useRef()
+  // Hold state for hovered and clicked events
+  const [hovered, hover] = useState(false)
+  const [clicked, click] = useState(false)
+  // Subscribe this component to the render-loop, rotate the mesh every frame
+  useFrame((state, delta) => (ref.current.rotation.x += 0.01))
+  // Return the view, these are regular Threejs elements expressed in JSX
+  return (
+    <mesh
+      {...props}
+      ref={ref}
+      scale={clicked ? 1.5 : 1}
+      onClick={(event) => click(!clicked)}
+      onPointerOver={(event) => hover(true)}
+      onPointerOut={(event) => hover(false)}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
+    </mesh>
+  )
+}
 
-class SpillthebeansThreejs extends Component {
+function Bean(props){
+    return (
+        <Canvas>
+            <ambientLight />
+            <pointLight position={[10, 10, 10]} />
+            <Box position={[-1.2, 0, 0]} />
+        </Canvas>
+    )
+}
 
-    constructor(props) {
-        super(props);
-        this.state = {
-        }
-        this.scene = null;
-        this.viewer = null;
-    }
-
-    componentDidUpdate(prevProps){
-    }
-
-    componentDidMount() {
-        const container = document.getElementById(this.props.id);
-        const viewer = new IfcViewerAPI({
-            container: container,
-        });
-        viewer.axes.setAxes();
-        viewer.IFC.setWasmPath('../../');
-        viewer.IFC.loader.ifcManager.applyWebIfcConfig({
-            USE_FAST_BOOLS: true,
-            COORDINATE_TO_ORIGIN: true
-          });
-
-        // Don't show edges
-        viewer.context.renderer.postProduction.active = false;
-
-        this.viewer = viewer;
-        this.scene = this.viewer.IFC.context.getScene();
-
-        // Create environmental components
-        this.sky = this.createSky();
-        this.ocean = this.createOcean(this.sky.sun);
-
-        // Selectors
-        window.onmousemove = () => viewer.IFC.selector.prePickIfcItem();
-        window.onclick = () => viewer.IFC.selector.pickIfcItem(true);
-        window.ondblclick = viewer.IFC.selector.highlightIfcItem(true);
-        // Clear selection
-        window.onkeydown = (event) => {
-            if(event.code === 'KeyC') {
-                viewer.IFC.selector.unpickIfcItems();
-                viewer.IFC.selector.unHighlightIfcItems();
-            }
-        }
-    }
-
-    createOcean(sun){
-        return new Ocean(this.viewer.IFC.context, sun);
-    }
-
-    createSky(){
-        return new Daytime(this.viewer.IFC.context);
-    }
-
-    disposeEnvironment(){
-        this.ocean.removeFromScene();
-        this.sky.removeFromScene();
-    }
-
-    render() {
-        return (
-            <div id={this.props.id} className={"fullsize"}/>
-        );
-    }
+// createRoot(document.getElementById('root')).render(
+function SpillthebeansThreejs(props) {
+    console.log(ReactDOM.findDOMNode(this))
+    return (
+        <>
+            <Bean args={props}/>
+        </>
+    )
 }
 
 SpillthebeansThreejs.defaultProps = {};

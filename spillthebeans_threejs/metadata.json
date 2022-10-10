@@ -2,57 +2,7 @@
   "src/lib/components/SpillthebeansThreejs.react.js": {
     "description": "",
     "displayName": "SpillthebeansThreejs",
-    "methods": [
-      {
-        "name": "handleFileUpdate",
-        "docblock": null,
-        "modifiers": [],
-        "params": [],
-        "returns": null
-      },
-      {
-        "name": "createOcean",
-        "docblock": null,
-        "modifiers": [],
-        "params": [
-          {
-            "name": "sun",
-            "type": null
-          }
-        ],
-        "returns": null
-      },
-      {
-        "name": "createSky",
-        "docblock": null,
-        "modifiers": [],
-        "params": [],
-        "returns": null
-      },
-      {
-        "name": "loadIfc",
-        "docblock": null,
-        "modifiers": [],
-        "params": [],
-        "returns": null
-      },
-      {
-        "name": "ifcloader",
-        "docblock": null,
-        "modifiers": [
-          "async"
-        ],
-        "params": [],
-        "returns": null
-      },
-      {
-        "name": "disposeEnvironment",
-        "docblock": null,
-        "modifiers": [],
-        "params": [],
-        "returns": null
-      }
-    ],
+    "methods": [],
     "props": {
       "id": {
         "type": {
