@@ -40,7 +40,6 @@ function Bean(props){
 
 // createRoot(document.getElementById('root')).render(
 function SpillthebeansThreejs(props) {
-    console.log(ReactDOM.findDOMNode(this))
     return (
         <>
             <Bean args={props}/>
