@@ -42,9 +42,9 @@ const Bean = (props) => {
                 <axesHelper />
                 <Suspense fallback={null}>
                     <Can />
+                    {/* <BeanSauce {...props}/> */}
+                    <Beans />
                 </Suspense>
-                {/* <BeanSauce {...props}/> */}
-                <Beans />
             </Canvas>
             <Loader />
         </>

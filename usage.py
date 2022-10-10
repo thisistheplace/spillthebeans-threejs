@@ -17,11 +17,18 @@ class Can(Resource):
         response.headers["content-type"] = "application/text"
         return response
 
+class Bean(Resource):
+    def get(self):
+        response = make_response(read_wasm("assets/bean.glb"))
+        response.headers["content-type"] = "application/text"
+        return response
+
 server = Flask('my_app')
 app = Dash(server=server, external_stylesheets=[dbc.themes.SIMPLEX])
 api = Api(server)
 
 api.add_resource(Can, '/assets/can.glb')
+api.add_resource(Bean, '/assets/bean.glb')
 
 app.layout = html.Div([
     html.Div(id="input", children=["test"]),

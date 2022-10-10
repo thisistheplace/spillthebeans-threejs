@@ -51,6 +51,7 @@ const createEmitter = ({ position, body }) => {
 };
 
 const Beans = (props) => {
+  const groupref = useRef()
   const ref = useRef()
   const state = useThree()
 
@@ -65,10 +66,13 @@ const Beans = (props) => {
     }),
   });
 
-  sphereEmitter.parent = ref.current
-
   const renderer = new MeshRenderer(state.scene, THREE)
   console.log(renderer)
+
+  const system = new ParticleSystem()
+  system.addEmitter(sphereEmitter)
+  system.addRenderer(renderer)
+  ref.current = system
 
   state.camera.position.z = 400;
   state.camera.position.y = -100;
@@ -83,7 +87,8 @@ const Beans = (props) => {
   })
 
   return (
-    <customSystem ref={ref} emitters={[sphereEmitter]} renderers={[renderer]}/>
+    // <customSystem ref={ref} emitters={[sphereEmitter]} renderers={[renderer]}/>
+    <group ref={groupref}/>
   )
 }
 
