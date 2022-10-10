@@ -2,11 +2,14 @@ import PropTypes from 'prop-types';
 
 import React, { useRef, useState, Suspense } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import {useGLTF, Loader, TrackballControls} from '@react-three/drei'
+import {Loader, OrbitControls} from '@react-three/drei'
 
-// import {Can} from '../model/can'
+import {Can} from '../model/can'
+import {BeanSauce} from '../model/beansauce'
+import {Beans} from '../model/beans'
+import {Lights} from '../model/lights'
 
-function Box(props) {
+const Box = (props) => {
   // This reference gives us direct access to the THREE.Mesh object
   const ref = useRef()
   // Hold state for hovered and clicked events
@@ -29,40 +32,31 @@ function Box(props) {
   )
 }
 
-function Can({ ...props }) {
-    const group = useRef()
-    const { nodes, materials } = useGLTF('/assets/can.glb')
-    console.log(nodes)
-    console.log(materials)
-    return (
-    <group ref={group} {...props} dispose={null}>
-        <mesh geometry={nodes["Can001"].geometry} material={materials["Tin"]}/>
-    </group>
-    )
-}
-
-function Bean(props){
+const Bean = (props) => {
     return (
         <>
-            <Canvas>
-                <TrackballControls/>
-                <ambientLight />
-                <pointLight position={[10, 10, 10]} />
+            <Canvas style={{'background':'white'}}>
+                <perspectiveCamera makeDefault position={[- 500, 500, 1500]} />
+                <Lights/>
+                <OrbitControls/>
+                <axesHelper />
                 <Suspense fallback={null}>
-                    <Can/>
+                    <Can />
                 </Suspense>
+                {/* <BeanSauce {...props}/> */}
+                <Beans />
             </Canvas>
             <Loader />
         </>
     )
 }
 
-// createRoot(document.getElementById('root')).render(
 function SpillthebeansThreejs(props) {
+    console.log(props)
     return (
-        <>
-            <Bean args={props}/>
-        </>
+        <div id={props.id}>
+            <Bean {...props}/>
+        </div>
     )
 }
 
@@ -72,7 +66,9 @@ SpillthebeansThreejs.propTypes = {
     /**
      * The ID used to identify the container for the IFC viewer component.
      */
-    id: PropTypes.string,
+    id: PropTypes.string.isRequired,
+
+    numBeans: PropTypes.number.isRequired
 };
 
 export default SpillthebeansThreejs;

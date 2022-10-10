@@ -1,29 +1,16 @@
-import React, { Suspense } from 'react';
-import Spinner from 'react-bootstrap/Spinner';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
-import {useLoader, extend} from '@react-three/fiber';
+import React, {useRef} from 'react'
+import {useGLTF} from '@react-three/drei'
 
-extend({Spinner})
-
-function LoadCan() {
-  const result = useLoader(OBJLoader, "/assets/can.obj")
-  // You don't need to check for the presence of the result, when we're here
-  // the result is guaranteed to be present since useLoader suspends the component
-  return(
-  <>
-    <primitive object={result.scene} />
-  </>
+const Can = (props) => {
+  const group = useRef()
+  const { nodes, materials } = useGLTF('/assets/can.glb')
+  console.log(nodes)
+  console.log(materials)
+  return (
+  <group ref={group} {...props} dispose={null}>
+      <mesh geometry={nodes["Can001"].geometry} material={materials["Tin"]}/>
+  </group>
   )
 }
 
-// function to build model
-function Can(){
-  return (
-    <Suspense fallback={<spinner animation="border" />}>
-      <LoadCan />
-    </Suspense>
-  );
-
-};
-
-export {Can};
+export {Can}
