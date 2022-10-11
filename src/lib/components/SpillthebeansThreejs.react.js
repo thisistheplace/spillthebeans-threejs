@@ -2,11 +2,10 @@ import PropTypes from 'prop-types';
 
 import React, { useRef, useState, Suspense } from 'react'
 import { Canvas, useFrame, extend } from '@react-three/fiber'
-import {Loader, OrbitControls} from '@react-three/drei'
+import {Loader, OrbitControls, Environment} from '@react-three/drei'
 import * as THREE from 'three'
 
 import {Can} from '../model/can'
-import {BeanSauce} from '../model/beansauce'
 import {Beans} from '../model/beans'
 import {Lights} from '../model/lights'
 
@@ -41,9 +40,7 @@ const Model = (props) => {
     return (
         <>
             <Can {...props}/>
-            {/* <BeanSauce {...props}/> */}
             <Beans {...props}/>
-            {/* <Floor {...props}/> */}
         </>
     )
 }
@@ -51,13 +48,14 @@ const Model = (props) => {
 function SpillthebeansThreejs(props) {
     return (
         <div id={props.id}>
-            <Canvas shadows style={{'background':'white'}}>
+            <Canvas shadows style={{'background':'white'}} camera={{position: [2, 1, 3]}}>
                 <perspectiveCamera makeDefault position={[- 500, 500, 1500]} />
                 <Lights/>
                 <OrbitControls/>
-                <axesHelper />
+                {/* <axesHelper /> */}
                 <Suspense fallback={null}>
                     <Model {...props}/>
+                    <Environment preset="warehouse" />
                 </Suspense>
             </Canvas>
             <Loader />

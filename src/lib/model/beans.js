@@ -21,7 +21,6 @@ import ParticleSystem, {
   Span,
   Vector3D,
 } from 'three-nebula';
-import easeOutExpo from 'three-nebula/build/cjs/ease/index'
 
 import * as THREE from 'three'
 
@@ -36,6 +35,14 @@ const createMesh = (geometry, material) => {
   mesh.castShadow = true
   return (mesh);
 }
+
+const material = new THREE.MeshPhysicalMaterial({
+  color: new THREE.Color('#13261f').convertSRGBToLinear(),
+  roughness: 0.8,
+  clearcoat: 0.5,
+  clearcoatRoughness: 0,
+  // metalness: 0.2
+})
 
 function Loader() {
   const { progress } = useProgress()
@@ -65,7 +72,7 @@ const createEmitter = ({ position, body }) => {
       new Radius(0),
       new Life(2),
       new Body(body),
-      new Position(new PointZone(0, 1, 0)),
+      new Position(new PointZone(0, 5, 0)),
       new RadialVelocity(10, new Vector3D(0, 1, 0), 180),
     ])
     .addBehaviours([
@@ -90,23 +97,24 @@ const Beans = (props) => {
   const [maxAngle, setMaxAngle] = useState(props.maxAngle)
 
   console.log("called init")
-  const { nodes, materials } = useGLTF('/assets/bean.glb')
+  const { nodes } = useGLTF('/assets/bean.glb')
 
   const sphereEmitter = createEmitter({
     position: {
-      x: 0,
+      x: 0.75,
       y: 0,
       z: 0
     },
     body: createMesh(
       nodes["Quad_Sphere"].geometry,
-      nodes["Quad_Sphere"].material
+      material
     )
   });
 
   console.log(sphereEmitter)
 
   const renderer = new MeshRenderer(state.scene, THREE)
+  console.log(renderer)
 
   const system = new ParticleSystem()
   system.addEmitter(sphereEmitter)
