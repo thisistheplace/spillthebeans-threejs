@@ -1,6 +1,6 @@
 import React, {useRef, useEffect, useState} from 'react'
 import {extend, useFrame} from '@react-three/fiber'
-import {useGLTF} from '@react-three/drei'
+import {useGLTF, ContactShadows} from '@react-three/drei'
 import * as THREE from 'three'
 
 extend({THREE})
@@ -38,7 +38,8 @@ const Can = (props) => {
 
   return (
   <group ref={ref} dispose={null}>
-      <mesh geometry={geom} material={materials["Tin"]}/>
+      <mesh geometry={geom} material={materials["Tin"]} castShadow/>
+      <ContactShadows scale={10} blur={5} far={10} frames={1}/>
   </group>
   )
 }

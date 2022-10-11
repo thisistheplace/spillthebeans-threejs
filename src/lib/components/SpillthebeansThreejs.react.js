@@ -43,6 +43,7 @@ const Model = (props) => {
             <Can {...props}/>
             {/* <BeanSauce {...props}/> */}
             <Beans {...props}/>
+            {/* <Floor {...props}/> */}
         </>
     )
 }
@@ -50,7 +51,7 @@ const Model = (props) => {
 function SpillthebeansThreejs(props) {
     return (
         <div id={props.id}>
-            <Canvas style={{'background':'white'}}>
+            <Canvas shadows style={{'background':'white'}}>
                 <perspectiveCamera makeDefault position={[- 500, 500, 1500]} />
                 <Lights/>
                 <OrbitControls/>

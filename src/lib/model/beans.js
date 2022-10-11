@@ -1,6 +1,6 @@
 import React, {useRef, useState, Suspense} from 'react'
 import {extend, useFrame, useThree} from '@react-three/fiber'
-import {Html, useProgress, useGLTF} from '@react-three/drei'
+import {Html, useProgress, useGLTF, ContactShadows} from '@react-three/drei'
 
 import ParticleSystem, {
   Body,
@@ -32,7 +32,9 @@ extend({THREE, CustomSystem})
 const createMesh = (geometry, material) => {
   console.log(geometry)
   geometry.scale(0.5, 0.5, 0.5)
-  return (new THREE.Mesh(geometry, material));
+  const mesh = new THREE.Mesh(geometry, material)
+  mesh.castShadow = true
+  return (mesh);
 }
 
 function Loader() {
@@ -41,7 +43,7 @@ function Loader() {
 }
 
 const createZone = () => {
-  const zone = new BoxZone(0, 0, 0, 100000, 0, 10000);
+  const zone = new BoxZone(0, 0.1, 0, 100000, 0, 10000);
 
   zone.friction = 0.5;
   zone.max = 7;
@@ -51,8 +53,8 @@ const createZone = () => {
 
 const createEmitter = ({ position, body }) => {
   const emitter = new Emitter();
-  emitter.damping = 0.2
-  emitter.energy = 0.1
+  emitter.damping = 0.1
+  emitter.energy = 0.00001
   const zone = createZone()
   console.log("created")
 
@@ -128,6 +130,7 @@ const Beans = (props) => {
   return (
     <Suspense fallback={<Loader/>}>
       {/* <group ref={groupref}/> */}
+      <ContactShadows scale={10} blur={5} far={20}/>
     </Suspense>
   )
 }

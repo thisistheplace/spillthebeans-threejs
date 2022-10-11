@@ -4,8 +4,10 @@ const Lights = (props) => {
   const group = useRef()
   return (
     <group ref={group}>
+      <hemisphereLight color="white" groundColor="black" intensity={0.75} />
+      <spotLight position={[50, 50, 10]} angle={0.15} penumbra={1} />
       <ambientLight color={0x101010}/>
-      <pointLight position={[0, 200, 200]} color={0xffffff} intensity={2} distance={1000} decay={1}/>
+      <pointLight position={[0, 200, 200]} color={0xffffff} intensity={0.5} distance={1000} decay={1}/>
       <spotLight position={[0, 500, 1000]} color={0xffffff} intensity={0.5}/>
     </group>
   )
