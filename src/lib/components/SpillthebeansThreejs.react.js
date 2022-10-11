@@ -1,61 +1,83 @@
-import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-/**
- * ExampleComponent is an example component.
- * It takes a property, `label`, and
- * displays it.
- * It renders an input with the property `value`
- * which is editable by the user.
- */
-export default class SpillthebeansThreejs extends Component {
-    render() {
-        const {id, label, setProps, value} = this.props;
+import React, { useRef, useState, Suspense } from 'react'
+import { Canvas, useFrame, extend } from '@react-three/fiber'
+import {Loader, OrbitControls, Environment} from '@react-three/drei'
+import * as THREE from 'three'
 
-        return (
-            <div id={id}>
-                ExampleComponent: {label}&nbsp;
-                <input
-                    value={value}
-                    onChange={
-                        /*
-                         * Send the new value to the parent component.
-                         * setProps is a prop that is automatically supplied
-                         * by dash's front-end ("dash-renderer").
-                         * In a Dash app, this will update the component's
-                         * props and send the data back to the Python Dash
-                         * app server if a callback uses the modified prop as
-                         * Input or State.
-                         */
-                        e => setProps({ value: e.target.value })
-                    }
-                />
-            </div>
-        );
-    }
+import {Can} from '../model/can'
+import {Beans} from '../model/beans'
+import {Lights} from '../model/lights'
+
+const Box = (props) => {
+  // This reference gives us direct access to the THREE.Mesh object
+  const ref = useRef()
+  // Hold state for hovered and clicked events
+  const [hovered, hover] = useState(false)
+  const [clicked, click] = useState(false)
+  // Subscribe this component to the render-loop, rotate the mesh every frame
+  useFrame((state, delta) => (ref.current.rotation.x += 0.01))
+  // Return the view, these are regular Threejs elements expressed in JSX
+  return (
+    <mesh
+      {...props}
+      ref={ref}
+      scale={clicked ? 1.5 : 1}
+      onClick={(event) => click(!clicked)}
+      onPointerOver={(event) => hover(true)}
+      onPointerOut={(event) => hover(false)}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
+    </mesh>
+  )
 }
 
-SpillthebeansThreejs.defaultProps = {};
+const Model = (props) => {
+    const [rotation, setRotation] = useState(props.rotation);
+    console.log(props)
+    // useFrame((state, delta) => (setRotation(rotation + 0.01)))
+
+    return (
+        <>
+            <Can {...props}/>
+            <Beans {...props}/>
+        </>
+    )
+}
+
+function SpillthebeansThreejs(props) {
+    return (
+        <div id={props.id}>
+            <Canvas shadows style={{'background':'white'}} camera={{position: [2, 1, 3]}}>
+                <perspectiveCamera makeDefault position={[- 500, 500, 1500]} />
+                <Lights/>
+                <OrbitControls/>
+                {/* <axesHelper /> */}
+                <Suspense fallback={null}>
+                    <Model {...props}/>
+                    <Environment preset="warehouse" />
+                </Suspense>
+            </Canvas>
+            <Loader />
+        </div>
+    )
+}
+
+SpillthebeansThreejs.defaultProps = {
+    axis: new THREE.Vector3(1, 0, 0)
+};
 
 SpillthebeansThreejs.propTypes = {
     /**
-     * The ID used to identify this component in Dash callbacks.
+     * The ID used to identify the container for the IFC viewer component.
      */
-    id: PropTypes.string,
+    id: PropTypes.string.isRequired,
 
-    /**
-     * A label that will be printed when this component is rendered.
-     */
-    label: PropTypes.string.isRequired,
+    numBeans: PropTypes.number.isRequired,
 
-    /**
-     * The value displayed in the input.
-     */
-    value: PropTypes.string,
+    rotation: PropTypes.number.isRequired,
 
-    /**
-     * Dash-assigned callback that should be called to report property changes
-     * to Dash, to make them available for callbacks.
-     */
-    setProps: PropTypes.func
+    maxAngle: PropTypes.number.isRequired,
 };
+
+export default SpillthebeansThreejs;
