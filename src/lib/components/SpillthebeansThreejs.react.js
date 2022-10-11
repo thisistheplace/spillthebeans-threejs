@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 
 import React, { useRef, useState, Suspense } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, extend } from '@react-three/fiber'
 import {Loader, OrbitControls} from '@react-three/drei'
+import * as THREE from 'three'
 
 import {Can} from '../model/can'
 import {BeanSauce} from '../model/beansauce'
@@ -32,35 +33,40 @@ const Box = (props) => {
   )
 }
 
-const Bean = (props) => {
+const Model = (props) => {
+    const [rotation, setRotation] = useState(props.rotation);
+    console.log(props)
+    // useFrame((state, delta) => (setRotation(rotation + 0.01)))
+
     return (
         <>
+            <Can {...props}/>
+            {/* <BeanSauce {...props}/> */}
+            <Beans {...props}/>
+        </>
+    )
+}
+
+function SpillthebeansThreejs(props) {
+    return (
+        <div id={props.id}>
             <Canvas style={{'background':'white'}}>
                 <perspectiveCamera makeDefault position={[- 500, 500, 1500]} />
                 <Lights/>
                 <OrbitControls/>
                 <axesHelper />
                 <Suspense fallback={null}>
-                    <Can />
-                    {/* <BeanSauce {...props}/> */}
-                    <Beans />
+                    <Model {...props}/>
                 </Suspense>
             </Canvas>
             <Loader />
-        </>
-    )
-}
-
-function SpillthebeansThreejs(props) {
-    console.log(props)
-    return (
-        <div id={props.id}>
-            <Bean {...props}/>
         </div>
     )
 }
 
-SpillthebeansThreejs.defaultProps = {};
+SpillthebeansThreejs.defaultProps = {
+    axis: new THREE.Vector3(1, 0, 0)
+};
 
 SpillthebeansThreejs.propTypes = {
     /**
@@ -68,7 +74,11 @@ SpillthebeansThreejs.propTypes = {
      */
     id: PropTypes.string.isRequired,
 
-    numBeans: PropTypes.number.isRequired
+    numBeans: PropTypes.number.isRequired,
+
+    rotation: PropTypes.number.isRequired,
+
+    maxAngle: PropTypes.number.isRequired,
 };
 
 export default SpillthebeansThreejs;

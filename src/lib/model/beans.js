@@ -1,6 +1,6 @@
-import React, {useRef} from 'react'
-import {extend, useFrame, useThree, useEffect} from '@react-three/fiber'
-import {useGLTF} from '@react-three/drei'
+import React, {useRef, useState, Suspense} from 'react'
+import {extend, useFrame, useThree} from '@react-three/fiber'
+import {Html, useProgress, useGLTF} from '@react-three/drei'
 
 import ParticleSystem, {
   Body,
@@ -11,6 +11,7 @@ import ParticleSystem, {
   Life,
   Mass,
   MeshRenderer,
+  PointZone,
   Position,
   RadialVelocity,
   Radius,
@@ -20,6 +21,7 @@ import ParticleSystem, {
   Span,
   Vector3D,
 } from 'three-nebula';
+import easeOutExpo from 'three-nebula/build/cjs/ease/index'
 
 import * as THREE from 'three'
 
@@ -33,10 +35,15 @@ const createMesh = (geometry, material) => {
   return (new THREE.Mesh(geometry, material));
 }
 
+function Loader() {
+  const { progress } = useProgress()
+  return <Html center>{progress} % loaded</Html>
+}
+
 const createZone = () => {
   const zone = new BoxZone(0, 0, 0, 100000, 0, 10000);
 
-  zone.friction = 0.95;
+  zone.friction = 0.5;
   zone.max = 7;
 
   return zone;
@@ -44,45 +51,50 @@ const createZone = () => {
 
 const createEmitter = ({ position, body }) => {
   const emitter = new Emitter();
-  emitter.damping = 0.8
-  emitter.energy = 1000000
-
+  emitter.damping = 0.2
+  emitter.energy = 0.1
   const zone = createZone()
+  console.log("created")
 
   return emitter
-    .setRate(new Rate(new Span(1, 10), new Span(0.1, 0.25)))
+    .setRate(new Rate(new Span(4, 8), new Span(0.01, 0.1)))
     .addInitializers([
-      new Mass(1),
-      new Radius(1),
-      new Life(2, 4),
+      new Mass(10),
+      new Radius(0),
+      new Life(2),
       new Body(body),
-      new Position(new BoxZone(1)),
-      new RadialVelocity(100, new Vector3D(0, 1, 1), 30),
+      new Position(new PointZone(0, 1, 0)),
+      new RadialVelocity(10, new Vector3D(0, 1, 0), 180),
     ])
     .addBehaviours([
-      new Rotate(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI, 1),
-      new Scale(0.1, 0.1),
-      new Gravity(3),
+      new Rotate('random', 'random'),
+      // new Rotate(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI, 0.01, easeOutExpo),
+      // new Scale(0.1, 0.1),
+      new Gravity(10),
       new CrossZone(zone, 'bound')
     ])
     .setPosition(position)
-    .emit();
+    .setTotalEmitTimes(10)
+    .emit()
 };
 
 const Beans = (props) => {
-  const groupref = useRef()
   const ref = useRef()
   const state = useThree()
 
+  const [rotation, setRotation] = useState(props.rotation);
+  const [axis, setAxis] = useState(props.axis)
+  const [angle, setAngle] = useState(0.)
+  const [maxAngle, setMaxAngle] = useState(props.maxAngle)
+
+  console.log("called init")
   const { nodes, materials } = useGLTF('/assets/bean.glb')
-  console.log("bean")
-  console.log(nodes)
-  console.log(nodes["Quad_Sphere"].geometry)
 
   const sphereEmitter = createEmitter({
     position: {
       x: 0,
       y: 0,
+      z: 0
     },
     body: createMesh(
       nodes["Quad_Sphere"].geometry,
@@ -90,13 +102,20 @@ const Beans = (props) => {
     )
   });
 
+  console.log(sphereEmitter)
+
   const renderer = new MeshRenderer(state.scene, THREE)
-  console.log(renderer)
 
   const system = new ParticleSystem()
   system.addEmitter(sphereEmitter)
   system.addRenderer(renderer)
   ref.current = system
+
+  // useEffect(() => {
+  //   if (!ref.current) return
+  //   console.log(ref.current.emitters)
+  //   // sphereEmitter.initializers[0].tha = rotation * Math.PI / 180.
+  // }, [rotation])
 
   // state.camera.position.z = 400;
   // state.camera.position.y = -100;
@@ -107,7 +126,9 @@ const Beans = (props) => {
   })
 
   return (
-    <group ref={groupref}/>
+    <Suspense fallback={<Loader/>}>
+      {/* <group ref={groupref}/> */}
+    </Suspense>
   )
 }
 
