@@ -47,7 +47,7 @@ const Model = (props) => {
 
 function SpillthebeansThreejs(props) {
     return (
-        <div id={props.id}>
+        <div id={props.id} style={{"height":"100%", "width":"100%"}}>
             <Canvas shadows style={{'background':'white'}} camera={{position: [2, 1, 3]}}>
                 <perspectiveCamera makeDefault position={[- 500, 500, 1500]} />
                 <Lights/>
