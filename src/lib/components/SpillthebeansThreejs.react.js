@@ -34,8 +34,6 @@ const Box = (props) => {
 
 const Model = (props) => {
     const [rotation, setRotation] = useState(props.rotation);
-    // useFrame((state, delta) => (setRotation(rotation + 0.01)))
-
     return (
         <>
             <Can {...props}/>
@@ -63,7 +61,9 @@ function SpillthebeansThreejs(props) {
 }
 
 SpillthebeansThreejs.defaultProps = {
-    axis: new THREE.Vector3(1, 0, 0)
+    axis: new THREE.Vector3(1, 0, 0),
+    rotation: 0.01,
+    scale: 0.5
 };
 
 SpillthebeansThreejs.propTypes = {
@@ -72,11 +72,11 @@ SpillthebeansThreejs.propTypes = {
      */
     id: PropTypes.string.isRequired,
 
-    numBeans: PropTypes.number.isRequired,
+    canAngle: PropTypes.number.isRequired,
 
-    rotation: PropTypes.number.isRequired,
+    scale: PropTypes.number,
 
-    maxAngle: PropTypes.number.isRequired,
+    rotation: PropTypes.number
 };
 
 export default SpillthebeansThreejs;

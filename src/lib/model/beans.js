@@ -28,8 +28,8 @@ class CustomSystem extends ParticleSystem {}
 
 extend({THREE, CustomSystem})
 
-const createMesh = (geometry, material) => {
-  geometry.scale(0.5, 0.5, 0.5)
+const createMesh = (geometry, material, scale) => {
+  geometry.scale(scale, scale, scale)
   const mesh = new THREE.Mesh(geometry, material)
   mesh.castShadow = true
   return (mesh);
@@ -75,8 +75,6 @@ const createEmitter = ({ position, body }) => {
     ])
     .addBehaviours([
       new Rotate('random', 'random'),
-      // new Rotate(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI, 0.01, easeOutExpo),
-      // new Scale(0.1, 0.1),
       new Gravity(10),
       new CrossZone(zone, 'bound')
     ])
@@ -88,12 +86,7 @@ const createEmitter = ({ position, body }) => {
 const Beans = (props) => {
   const ref = useRef()
   const state = useThree()
-
-  const [rotation, setRotation] = useState(props.rotation);
-  const [axis, setAxis] = useState(props.axis)
-  const [angle, setAngle] = useState(0.)
-  const [maxAngle, setMaxAngle] = useState(props.maxAngle)
-
+  const [scale, setScale] = useState(props.scale)
   const { nodes } = useGLTF('/assets/bean.glb')
 
   const sphereEmitter = createEmitter({
@@ -104,7 +97,8 @@ const Beans = (props) => {
     },
     body: createMesh(
       nodes["Quad_Sphere"].geometry,
-      material
+      material,
+      scale
     )
   });
 
@@ -115,15 +109,6 @@ const Beans = (props) => {
   system.addRenderer(renderer)
   ref.current = system
 
-  // useEffect(() => {
-  //   if (!ref.current) return
-  //   console.log(ref.current.emitters)
-  //   // sphereEmitter.initializers[0].tha = rotation * Math.PI / 180.
-  // }, [rotation])
-
-  // state.camera.position.z = 400;
-  // state.camera.position.y = -100;
-
   useFrame((state, delta) => {
     if (!ref.current) return
     ref.current.update(delta)
@@ -131,7 +116,6 @@ const Beans = (props) => {
 
   return (
     <Suspense fallback={<Loader/>}>
-      {/* <group ref={groupref}/> */}
       <ContactShadows scale={10} blur={5} far={20}/>
     </Suspense>
   )

@@ -10,8 +10,8 @@ class App extends Component {
         this.state = {
             id: "test_id",
             numBeans: 2,
-            rotation: 0.01,
-            maxAngle: Math.PI / 1.5
+            scale: 0.5,
+            canAngle: Math.PI * -0.75
         };
         this.setProps = this.setProps.bind(this);
     }

@@ -20,35 +20,35 @@ const Can = (props) => {
   const [rotation, setRotation] = useState(props.rotation);
   const [axis, setAxis] = useState(props.axis)
   const [angle, setAngle] = useState(0.)
-  const [maxAngle, setMaxAngle] = useState(props.maxAngle)
+  const [canAngle, setCanAngle] = useState(props.canAngle)
 
   const can = nodes["Can001"].geometry
   const lid = nodes["Can002"].geometry
 
   useEffect(() => {
     can.scale(15, 15, 15)
-    can.rotateZ(Math.PI * -0.75)
+    can.rotateZ(canAngle)
     can.translate(0, 1.5, 0)
 
     lid.scale(15, 15, 15)
-    lid.rotateZ(Math.PI * -0.75)
+    lid.rotateZ(canAngle)
     lid.translate(0, 1.5, 0)
   }, [])
 
-  useEffect(() => {
-    if (!ref.current) return
-    if (angle > maxAngle){
-      setRotation(0.)
-    }
-  }, [angle])
+  // useEffect(() => {
+  //   if (!ref.current) return
+  //   if (angle > canAngle){
+  //     setRotation(0.)
+  //   }
+  // }, [angle])
 
-  useFrame((state, delta) => {
-    if (!ref.current) return
-    if (rotation > 0.){
-      // ref.current.rotateOnWorldAxis(axis, rotation)
-      setAngle(angle + rotation)
-    }
-  })
+  // useFrame((state, delta) => {
+  //   if (!ref.current) return
+  //   if (rotation > 0.){
+  //     // ref.current.rotateOnWorldAxis(axis, rotation)
+  //     setAngle(angle + rotation)
+  //   }
+  // })
 
   return (
   <group ref={ref} dispose={null}>
