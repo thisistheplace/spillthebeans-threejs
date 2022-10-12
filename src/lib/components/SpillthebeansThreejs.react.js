@@ -34,7 +34,6 @@ const Box = (props) => {
 
 const Model = (props) => {
     const [rotation, setRotation] = useState(props.rotation);
-    console.log(props)
     // useFrame((state, delta) => (setRotation(rotation + 0.01)))
 
     return (

@@ -29,7 +29,6 @@ class CustomSystem extends ParticleSystem {}
 extend({THREE, CustomSystem})
 
 const createMesh = (geometry, material) => {
-  console.log(geometry)
   geometry.scale(0.5, 0.5, 0.5)
   const mesh = new THREE.Mesh(geometry, material)
   mesh.castShadow = true
@@ -63,7 +62,6 @@ const createEmitter = ({ position, body }) => {
   emitter.damping = 0.1
   emitter.energy = 0.00001
   const zone = createZone()
-  console.log("created")
 
   return emitter
     .setRate(new Rate(new Span(4, 8), new Span(0.01, 0.1)))
@@ -96,7 +94,6 @@ const Beans = (props) => {
   const [angle, setAngle] = useState(0.)
   const [maxAngle, setMaxAngle] = useState(props.maxAngle)
 
-  console.log("called init")
   const { nodes } = useGLTF('/assets/bean.glb')
 
   const sphereEmitter = createEmitter({
@@ -111,10 +108,7 @@ const Beans = (props) => {
     )
   });
 
-  console.log(sphereEmitter)
-
   const renderer = new MeshRenderer(state.scene, THREE)
-  console.log(renderer)
 
   const system = new ParticleSystem()
   system.addEmitter(sphereEmitter)
