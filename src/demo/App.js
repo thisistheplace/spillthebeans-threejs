@@ -10,7 +10,7 @@ class App extends Component {
         this.state = {
             id: "test_id",
             numBeans: 2,
-            scale: 0.5,
+            scale: 0.075,
             canAngle: Math.PI * -0.75
         };
         this.setProps = this.setProps.bind(this);

@@ -29,8 +29,9 @@ class CustomSystem extends ParticleSystem {}
 extend({THREE, CustomSystem})
 
 const createMesh = (geometry, material, scale) => {
-  geometry.scale(scale, scale, scale)
-  const mesh = new THREE.Mesh(geometry, material)
+  const meshGeom = geometry.clone()
+  meshGeom.scale(scale, scale, scale)
+  const mesh = new THREE.Mesh(meshGeom, material)
   mesh.castShadow = true
   return (mesh);
 }
@@ -89,6 +90,8 @@ const Beans = (props) => {
   const [scale, setScale] = useState(props.scale)
   const { nodes } = useGLTF('/assets/bean.glb')
 
+  const system = new ParticleSystem()
+
   const sphereEmitter = createEmitter({
     position: {
       x: 0.75,
@@ -101,11 +104,9 @@ const Beans = (props) => {
       scale
     )
   });
+  system.addEmitter(sphereEmitter)
 
   const renderer = new MeshRenderer(state.scene, THREE)
-
-  const system = new ParticleSystem()
-  system.addEmitter(sphereEmitter)
   system.addRenderer(renderer)
   ref.current = system
 
