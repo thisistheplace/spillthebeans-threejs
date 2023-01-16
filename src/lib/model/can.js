@@ -14,45 +14,55 @@ const material = new THREE.MeshPhysicalMaterial({
   side: THREE.DoubleSide
 })
 
+const label = () => {
+  const texture = new THREE.TextureLoader().load( "/assets/label.png" );
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.rotation = Math.PI
+  texture.repeat.set( 1.1, 1.2 );
+  texture.offset.set(1.4, 0)
+  // texture.anisotropy = 20
+  const material = new THREE.MeshBasicMaterial(
+    {
+      map: texture
+    }
+  )
+  material.side = THREE.FrontSide
+  console.log(material)
+  return material
+}
+
 const Can = (props) => {
   const ref = useRef()
-  const { nodes, materials } = useGLTF('/assets/open_can.glb')
-  const [rotation, setRotation] = useState(props.rotation);
-  const [axis, setAxis] = useState(props.axis)
-  const [angle, setAngle] = useState(0.)
+  const { nodes } = useGLTF('/assets/single-can.glb')
   const [canAngle, setCanAngle] = useState(props.canAngle)
 
-  const can = nodes["Can001"].geometry
-  const lid = nodes["Can002"].geometry
+  const canBase = nodes["can-base"].children[0].geometry
+  const canMid = nodes["can-middle"].children[0].geometry
+  const canTop = nodes["can-top"].children[0].geometry
+  const cans = [canBase, canMid, canMid.clone(), canTop]
+  const lid = nodes["can-lid"].geometry
+
+  const materials = [material, label(), material, material]
+
 
   useEffect(() => {
-    can.scale(15, 15, 15)
-    can.rotateZ(canAngle)
-    can.translate(0, 1.5, 0)
+    cans.forEach(canPart => {
+      canPart.scale(15, 15, 15)
+      canPart.rotateZ(canAngle)
+      canPart.translate(0, 1.5, 0)
+    })
 
     lid.scale(15, 15, 15)
     lid.rotateZ(canAngle)
     lid.translate(0, 1.5, 0)
   }, [])
 
-  // useEffect(() => {
-  //   if (!ref.current) return
-  //   if (angle > canAngle){
-  //     setRotation(0.)
-  //   }
-  // }, [angle])
-
-  // useFrame((state, delta) => {
-  //   if (!ref.current) return
-  //   if (rotation > 0.){
-  //     // ref.current.rotateOnWorldAxis(axis, rotation)
-  //     setAngle(angle + rotation)
-  //   }
-  // })
-
   return (
   <group ref={ref} dispose={null}>
-      <mesh geometry={can} material={material} castShadow/>
+      {cans.map((canPart, i) => {
+        return (<mesh key={i} geometry={canPart} material={materials[i]} castShadow/>)
+      })}
       <mesh geometry={lid} material={material} castShadow/>
       <ContactShadows scale={10} blur={5} far={10} frames={1}/>
   </group>
