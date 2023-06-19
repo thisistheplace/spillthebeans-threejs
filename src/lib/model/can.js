@@ -43,7 +43,8 @@ const Can = (props) => {
   const cans = [canBase, canMid, canMid.clone(), canTop]
   const lid = nodes["can-lid"].geometry
 
-  const materials = [material, label(), material, material]
+  // const materials = [material, label(), material, material]
+  const materials = [material, material, material, material]
 
 
   useEffect(() => {

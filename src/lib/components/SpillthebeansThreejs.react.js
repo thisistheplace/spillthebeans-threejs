@@ -52,7 +52,7 @@ function SpillthebeansThreejs(props) {
                 {/* <axesHelper /> */}
                 <Suspense fallback={null}>
                     <Model {...props}/>
-                    <Environment preset="warehouse" />
+                    <Environment files="/assets/background.hdr" />
                 </Suspense>
             </Canvas>
             <Loader />

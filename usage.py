@@ -1,9 +1,10 @@
 import spillthebeans_threejs
-from dash import Dash, callback, html, Input, Output
+from dash import Dash, html
 from pathlib import Path
 import dash_bootstrap_components as dbc
 from flask import Flask, make_response
 from flask_restful import Resource, Api
+import math
 
 def read_wasm(fpath: str) -> bytes:
     resolved = Path(fpath).resolve()
@@ -22,6 +23,12 @@ class Bean(Resource):
         response = make_response(read_wasm("assets/bean.glb"))
         response.headers["content-type"] = "application/text"
         return response
+    
+class Background(Resource):
+    def get(self):
+        response = make_response(read_wasm("assets/background.hdr"))
+        response.headers["content-type"] = "application/text"
+        return response
 
 server = Flask('my_app')
 app = Dash(server=server, external_stylesheets=[dbc.themes.SIMPLEX])
@@ -29,12 +36,14 @@ api = Api(server)
 
 api.add_resource(Can, '/assets/can.glb')
 api.add_resource(Bean, '/assets/bean.glb')
+api.add_resource(Background, '/assets/background.hdr')
 
 app.layout = html.Div([
     html.Div(id="input", children=["test"]),
     html.Canvas(id="canvas"),
     spillthebeans_threejs.SpillthebeansThreejs(
         id='test',
+        canAngle=math.pi * -0.75
         # beans=[{"id": "test"}]
     ),
     ],
